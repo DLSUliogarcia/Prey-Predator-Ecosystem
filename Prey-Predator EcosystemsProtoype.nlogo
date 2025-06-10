@@ -61,12 +61,48 @@ to setup
   reset-ticks
 end
 
+
+to flee-from-foxes ; rabbit procedure
+  let nearby-foxes foxes in-radius 5  ; adjust radius as needed
+
+  ifelse any? nearby-foxes [
+    ; There are foxes nearby - move away from the closest one
+    let closest-fox min-one-of nearby-foxes [distance myself]
+    face closest-fox
+    rt 180  ; turn around to face away from the fox
+    fd 1    ; move away
+  ]
+  [
+    ; No foxes nearby - move randomly
+    rt random 360  ; turn a little left or right
+    fd 1               ; move forward
+  ]
+end
+
+
 to go
   if not any? turtles [ stop ]
 
   ask rabbits [
 
     set energy energy - 1
+
+
+    let nearby-foxes foxes in-radius 7  ; increased detection radius
+
+    ifelse any? nearby-foxes [
+      let closest-fox min-one-of nearby-foxes [distance myself]
+      face closest-fox
+      rt 180 + random 60 - 30  ; turn away with some randomness
+      fd 1.8  ; flee faster than foxes can chase
+      set energy energy - 0.5  ; extra energy cost for fleeing
+    ]
+    [
+      ; Normal movement when safe
+      rt random 360
+      fd 1
+    ]
+
 
     let target-grass one-of patches with [pcolor = lime]
     if target-grass != nobody [
@@ -110,20 +146,26 @@ to go
 
   ask foxes [
 
-    set energy energy - 1  ; Lose energy each tick
+    set energy energy - 0.75  ; reduced energy consumption
 
-    let target-rabbit one-of rabbits in-radius 3
+    let target-rabbit one-of rabbits in-radius 5 with [energy < 15]  ; target weaker rabbits
 
     ifelse target-rabbit != nobody [
-    face target-rabbit
-    fd min (list 2 distance target-rabbit)  ; Move toward rabbit, up to 2 units
-    if distance target-rabbit <= 1 [
-      set energy energy + [energy] of target-rabbit
-      ask target-rabbit [ die ]
+      face target-rabbit
+      fd min (list 1.5 distance target-rabbit)  ; slower pursuit
+      if distance target-rabbit <= 1 [
+        set energy energy + ([energy] of target-rabbit * 0.75)  ; don't get full energy
+        ask target-rabbit [ die ]
+      ]
     ]
-    ] [
-      rt random 360
-      fd 1  ; Move randomly if no rabbit nearby
+    [
+      ; More likely to wander when not hunting
+      ifelse random-float 1.0 < 0.3 [
+        rt random 90 - 45
+      ]
+      [
+        fd 0.7  ; slower movement when not hunting
+      ]
     ]
 
     ; Reproduction logic
@@ -229,7 +271,7 @@ rabbit-count
 rabbit-count
 0
 250
-100.0
+30.0
 1
 1
 NIL
@@ -282,6 +324,42 @@ count patches with [pcolor = lime]
 17
 1
 11
+
+PLOT
+28
+460
+228
+610
+rabbist
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count rabbits"
+
+PLOT
+260
+458
+460
+608
+foxes
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count foxes"
 
 @#$#@#$#@
 ## WHAT IS IT?

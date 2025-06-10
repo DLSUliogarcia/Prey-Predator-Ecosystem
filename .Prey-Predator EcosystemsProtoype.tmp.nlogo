@@ -61,6 +61,25 @@ to setup
   reset-ticks
 end
 
+
+to flee-from-foxes ; rabbit procedure
+  let nearby-foxes foxes in-radius 5  ; adjust radius as needed
+
+  ifelse any? nearby-foxes [
+    ; There are foxes nearby - move away from the closest one
+    let closest-fox min-one-of nearby-foxes [distance myself]
+    face closest-fox
+    rt 180  ; turn around to face away from the fox
+    fd 1    ; move away
+  ]
+  [
+    ; No foxes nearby - move randomly
+    rt random 360  ; turn a little left or right
+    fd 1               ; move forward
+  ]
+end
+
+
 to go
   if not any? turtles [ stop ]
 
@@ -68,10 +87,29 @@ to go
 
     set energy energy - 1
 
+
+
+    [
+      ; No foxes nearby - normal behavior
+      let target-grass one-of patches with [pcolor = lime]
+
+      ifelse target-grass != nobody and distance target-grass > 1
+      [
+        ; Move toward grass
+        face target-grass
+        fd 1.2
+      ]
+      [
+        ; No grass nearby or already on grass - random movement
+        right random 360
+        forward 1
+      ]
+    ]
+
     let target-grass one-of patches with [pcolor = lime]
     if target-grass != nobody [
       face target-grass
-      fd 1
+      fd 1.2
     ]
 
     if target-grass = nobody or distance target-grass > 1 [
@@ -108,6 +146,50 @@ to go
     ]
   ]
 
+  ask foxes [
+
+    set energy energy - 0.75  ; reduced energy consumption
+
+    let target-rabbit one-of rabbits in-radius 5 with [energy < 15]  ; target weaker rabbits
+
+    ifelse target-rabbit != nobody [
+      face target-rabbit
+      fd min (list 1.5 distance target-rabbit)  ; slower pursuit
+      if distance target-rabbit <= 1 [
+        set energy energy + ([energy] of target-rabbit * 0.75)  ; don't get full energy
+        ask target-rabbit [ die ]
+      ]
+    ]
+    [
+      ; More likely to wander when not hunting
+      ifelse random-float 1.0 < 0.3 [
+        rt random 90 - 45
+      ]
+      [
+        fd 0.7  ; slower movement when not hunting
+      ]
+    ]
+
+    ; Reproduction logic
+    if random-float 1.0 < fox-multiply-chance and energy > 50 [
+      let litter-size (random 2) + 1
+      let fox-multiply-energy energy / 2
+      set energy energy - fox-multiply-energy
+
+      repeat litter-size [
+        hatch-foxes 1 [
+          set shape "arrow"
+          set energy fox-multiply-energy / litter-size
+          set color orange
+          set size 2
+          rt random 360
+          fd 1
+        ]
+      ]
+    ]
+
+    if energy <= 0 [ die ]  ; Die if out of energy
+  ]
 
   ask patches with [pcolor = brown] [
     set grass-regrw-timer grass-regrw-timer + 1
@@ -191,7 +273,7 @@ rabbit-count
 rabbit-count
 0
 250
-50.0
+100.0
 1
 1
 NIL
@@ -206,11 +288,80 @@ fox-count
 fox-count
 0
 250
-100.0
+59.0
 1
 1
 NIL
 HORIZONTAL
+
+MONITOR
+17
+171
+109
+216
+Rabbit count
+count rabbits
+17
+1
+11
+
+MONITOR
+19
+223
+97
+268
+Fox Count
+count foxes
+17
+1
+11
+
+MONITOR
+120
+171
+177
+216
+Grass
+count patches with [pcolor = lime]
+17
+1
+11
+
+PLOT
+28
+460
+228
+610
+rabbist
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count rabbits"
+
+PLOT
+260
+458
+460
+608
+foxes
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count foxes"
 
 @#$#@#$#@
 ## WHAT IS IT?
