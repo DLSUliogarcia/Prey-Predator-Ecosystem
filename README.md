@@ -1,7 +1,9 @@
 # Prey-Predator-Ecosystem
 Externalize the following variables:
-- Fox Fertility
-- Rabbit Fertility
+- Fox Fertility (Average Number of Births)
+- Rabbit Fertility (Average Number of Births)
+- Fox Reproductive Chance
+- Rabbit Reproductive Chance
 - Grass Energy
 - Grass Regrowth
 
