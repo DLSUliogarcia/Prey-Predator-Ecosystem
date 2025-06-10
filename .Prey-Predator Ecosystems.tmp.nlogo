@@ -39,9 +39,9 @@ to setup
 
   ;; Rabbits
   create-rabbits rabbit-count [
-    set shape "circle"
+    set shape ""
     set color white
-    set size 0.75
+    set size 1.5
     set energy (random 30) + 20
     setxy random-xcor random-ycor
   ]
@@ -95,10 +95,10 @@ to go
 
       repeat litter-size [
         hatch-rabbits 1 [
-          set shape "circle"
+          set shape "airplane"
           set energy rabbit-multiply-energy / litter-size
           set color white
-          set size 0.75
+          set size 1.5
           right random 360
           forward 1
         ]
