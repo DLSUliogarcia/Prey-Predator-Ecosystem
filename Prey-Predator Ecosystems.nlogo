@@ -11,7 +11,7 @@ turtles-own [
 ]
 
 patches-own [
-  grass-energy-on-patch ;; Renamed to avoid conflict with global grass-energy
+  grass-energy-on-patch
   grass-regrw-timer
 ]
 
@@ -32,7 +32,7 @@ to setup
   repeat num-grass-patches [
     ask one-of patches with [pcolor = brown] [
       set pcolor lime
-      set grass-energy-on-patch grass-energy ;; Initial grass energy on patch, can be random
+      set grass-energy-on-patch grass-energy
       set grass-regrw-timer grass-regrowth-rate
     ]
   ]
@@ -87,7 +87,7 @@ to go
     ;; Rabbit reproduction
     if random-float 1.0 < rabbit-multiply-chance and energy > 10 [
       ;; Litter size is base fertility +/- 4
-      let litter-size rabbit-fertility + (random 9) - 4  ;; random 9 gives 0-8, so -4 gives -4 to 4
+      let litter-size rabbit-fertility + (random 9) - 4
       if litter-size < 1 [set litter-size 1] ;; Ensure at least 1 child
       let rabbit-multiply-energy energy * 0.33
       set energy energy - rabbit-multiply-energy
@@ -131,7 +131,7 @@ to go
     ;; Fox reproduction
     if random-float 1.0 < fox-multiply-chance and energy > 50 [
       ;; Litter size is base fertility +/- 2
-      let litter-size fox-fertility + (random 5) - 2  ;; random 5 gives 0-4, so -2 gives -2 to 2
+      let litter-size fox-fertility + (random 5) - 2
       if litter-size < 1 [set litter-size 1] ;; Ensure at least 1 child
       let fox-multiply-energy energy * 0.33
       set energy energy - fox-multiply-energy
@@ -155,9 +155,9 @@ to go
 
   ask patches with [pcolor = brown] [
     set grass-regrw-timer grass-regrw-timer + 1
-    if grass-regrw-timer >= grass-regrowth-rate [ ;; Use the global grass-regrowth-rate
+    if grass-regrw-timer >= grass-regrowth-rate [
       set pcolor lime
-      set grass-energy-on-patch grass-energy ;; Set the grass energy on the patch to the global grass-energy
+      set grass-energy-on-patch grass-energy
       set grass-regrw-timer 0
     ]
   ]

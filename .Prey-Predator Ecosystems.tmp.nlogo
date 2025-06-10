@@ -11,7 +11,7 @@ turtles-own [
 ]
 
 patches-own [
-  grass-energy-on-patch ;; Renamed to avoid conflict with global grass-energy
+  grass-energy-on-patch
   grass-regrw-timer
 ]
 
@@ -155,7 +155,7 @@ to go
 
   ask patches with [pcolor = brown] [
     set grass-regrw-timer grass-regrw-timer + 1
-    if grass-regrw-timer >= grass-regrowth-rate [ ;; Use the global grass-regrowth-rate
+    if grass-regrw-timer >= grass-regrowth-rate [
       set pcolor lime
       set grass-energy-on-patch grass-energy ;; Set the grass energy on the patch to the global grass-energy
       set grass-regrw-timer 0
@@ -228,9 +228,9 @@ NIL
 
 SLIDER
 102
-524
+470
 274
-557
+503
 rabbit-count
 rabbit-count
 1
@@ -242,10 +242,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-101
-545
-273
-578
+102
+525
+274
+558
 fox-count
 fox-count
 1
