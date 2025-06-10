@@ -11,5 +11,5 @@ Monitor Values
 - Number of Rabbits
 
 XY Plot Values
-f(number of ticks) = number of foxes
-f(number of ticks) = number of rabbits
+- f(number of ticks) = number of foxes
+- f(number of ticks) = number of rabbits
