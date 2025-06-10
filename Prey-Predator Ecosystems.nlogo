@@ -68,13 +68,13 @@ to go
     let target-grass one-of patches with [pcolor = lime]
     if target-grass != nobody [
       face target-grass
-      fd 1
+      fd rabbit-speed
     ]
 
     ;; If no grass target or not close enough, move randomly
     if target-grass = nobody or distance target-grass > 1 [
       right random 360
-      forward 1
+      forward rabbit-speed
     ]
 
     ;; If on a grass patch, eat it
@@ -100,7 +100,7 @@ to go
           set color white
           set size 0.75
           right random 360
-          forward 1
+          forward rabbit-speed
         ]
       ]
     ]
@@ -117,7 +117,7 @@ to go
     let target-rabbit one-of rabbits in-radius 5
     if target-rabbit != nobody [
       face target-rabbit
-      fd 1.16
+      fd fox-speed
       if distance target-rabbit <= 1 [
         set energy energy + [energy] of target-rabbit
         ask target-rabbit [ die ]
@@ -127,7 +127,7 @@ to go
     ;; If no rabbit target or not close enough, move randomly
     if target-rabbit = nobody or distance target-rabbit > 1 [
       right random 360
-      forward 1.16
+      forward fox-speed
     ]
 
     ;; Fox reproduction
@@ -145,7 +145,7 @@ to go
           set color orange
           set size 2
           right random 360
-          forward 1.16
+          forward fox-speed
         ]
       ]
     ]
@@ -195,10 +195,10 @@ ticks
 30.0
 
 BUTTON
-25
-470
-91
-503
+26
+472
+92
+505
 SETUP
 setup
 NIL
@@ -212,10 +212,10 @@ NIL
 1
 
 BUTTON
-27
-523
-90
-556
+28
+525
+91
+558
 GO
 go
 T
@@ -229,40 +229,40 @@ NIL
 1
 
 SLIDER
-101
-522
-273
-555
-rabbit-count
-rabbit-count
-1
-100
-30.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
 102
-468
+524
 274
-501
-fox-count
-fox-count
+557
+rabbit-count
+rabbit-count
 1
 100
-10.0
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-288
-468
-460
-501
+103
+470
+275
+503
+fox-count
+fox-count
+1
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+289
+470
+461
+503
 rabbit-fertility
 rabbit-fertility
 1
@@ -274,10 +274,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-289
-522
-461
-555
+290
+524
+462
+557
 fox-fertility
 fox-fertility
 1
@@ -289,10 +289,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-476
-468
-648
-501
+477
+470
+649
+503
 grass-energy
 grass-energy
 1
@@ -304,16 +304,46 @@ NIL
 HORIZONTAL
 
 SLIDER
-476
-522
-648
-555
+477
+524
+649
+557
 grass-regrowth-rate
 grass-regrowth-rate
 1
 100
 4.0
 1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+671
+523
+843
+556
+fox-speed
+fox-speed
+0.001
+2.500
+1.136
+0.001
+1
+NIL
+HORIZONTAL
+
+SLIDER
+668
+471
+840
+504
+rabbit-speed
+rabbit-speed
+0.001
+2.500
+1.0
+0.001
 1
 NIL
 HORIZONTAL
