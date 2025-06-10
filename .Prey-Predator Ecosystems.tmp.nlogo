@@ -108,48 +108,6 @@ to go
     ]
   ]
 
-  ask foxes [
-
-    set energy energy - 1
-
-    let target-rabbit one-of rabbits in-radius 5
-    if target-rabbit != nobody [
-      face target-rabbit
-      fd 1
-      if distance target-rabbit <= 1 [
-
-        set energy energy + [energy] of target-rabbit
-        ask target-rabbit [ die ]
-      ]
-    ]
-
-    if target-rabbit = nobody or distance target-rabbit > 1 [
-      right random 360
-      forward 1
-    ]
-
-    if random-float 1.0 < fox-multiply-chance and energy > 50 [
-      let litter-size (random 2) + 1
-      let fox-multiply-energy energy / 2
-      set energy energy - fox-multiply-energy
-
-      repeat litter-size [
-        hatch-foxes 1 [
-          set shape "arrow"
-          set energy fox-multiply-energy / litter-size
-          set color orange
-          set size 2
-          right random 360
-          forward 1
-        ]
-      ]
-    ]
-
-    if energy <= 0 [
-      die
-    ]
-  ]
-
 
   ask patches with [pcolor = brown] [
     set grass-regrw-timer grass-regrw-timer + 1
