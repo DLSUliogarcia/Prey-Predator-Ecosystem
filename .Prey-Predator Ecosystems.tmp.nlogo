@@ -32,16 +32,16 @@ to setup
   repeat num-grass-patches [
     ask one-of patches with [pcolor = brown] [
       set pcolor lime
-      set grass-energy-on-patch (random 21) + 5 ;; Initial grass energy on patch, can be random
+      set grass-energy-on-patch grass-energy ;; Initial grass energy on patch, can be random
       set grass-regrw-timer grass-regrowth-rate
     ]
   ]
 
   ;; Rabbits
   create-rabbits rabbit-count [
-    set shape ""
+    set shape "circle"
     set color white
-    set size 1.5
+    set size 0.75
     set energy (random 30) + 20
     setxy random-xcor random-ycor
   ]
@@ -90,15 +90,15 @@ to go
       ;; Litter size is base fertility +/- 4
       let litter-size rabbit-fertility + (random 9) - 4  ;; random 9 gives 0-8, so -4 gives -4 to 4
       if litter-size < 1 [set litter-size 1] ;; Ensure at least 1 child
-      let rabbit-multiply-energy energy / 2
+      let rabbit-multiply-energy energy * 0.33
       set energy energy - rabbit-multiply-energy
 
       repeat litter-size [
         hatch-rabbits 1 [
-          set shape "airplane"
-          set energy rabbit-multiply-energy / litter-size
+          set shape "circle"
+          set energy (rabbit-multiply-energy / litter-size)
           set color white
-          set size 1.5
+          set size 0.75
           right random 360
           forward 1
         ]
@@ -117,7 +117,7 @@ to go
     let target-rabbit one-of rabbits in-radius 5
     if target-rabbit != nobody [
       face target-rabbit
-      fd 1
+      fd 1.15
       if distance target-rabbit <= 1 [
         set energy energy + [energy] of target-rabbit
         ask target-rabbit [ die ]
@@ -127,7 +127,7 @@ to go
     ;; If no rabbit target or not close enough, move randomly
     if target-rabbit = nobody or distance target-rabbit > 1 [
       right random 360
-      forward 1
+      forward 1.15
     ]
 
     ;; Fox reproduction
@@ -135,17 +135,17 @@ to go
       ;; Litter size is base fertility +/- 2
       let litter-size fox-fertility + (random 5) - 2  ;; random 5 gives 0-4, so -2 gives -2 to 2
       if litter-size < 1 [set litter-size 1] ;; Ensure at least 1 child
-      let fox-multiply-energy energy / 2
+      let fox-multiply-energy energy * 0.33
       set energy energy - fox-multiply-energy
 
       repeat litter-size [
         hatch-foxes 1 [
           set shape "arrow"
-          set energy fox-multiply-energy / litter-size
+          set energy 10 + (fox-multiply-energy / litter-size)
           set color orange
           set size 2
           right random 360
-          forward 1
+          forward 1.125
         ]
       ]
     ]
@@ -168,13 +168,13 @@ to go
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-210
+463
 10
-647
-448
+892
+440
 -1
 -1
-13.0
+12.76
 1
 10
 1
@@ -195,10 +195,10 @@ ticks
 30.0
 
 BUTTON
-32
-18
-98
-51
+25
+470
+91
+503
 SETUP
 setup
 NIL
@@ -212,10 +212,10 @@ NIL
 1
 
 BUTTON
-112
-18
-175
-51
+27
+523
+90
+556
 GO
 go
 T
@@ -229,44 +229,29 @@ NIL
 1
 
 SLIDER
-14
-59
-186
-92
+101
+522
+273
+555
 rabbit-count
 rabbit-count
 1
-250
-100.0
+100
+30.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-14
-99
-186
-132
+102
+468
+274
+501
 fox-count
 fox-count
 1
-250
-50.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-12
-141
-184
-174
-rabbit-fertility
-rabbit-fertility
-1
-12
+100
 10.0
 1
 1
@@ -274,25 +259,40 @@ NIL
 HORIZONTAL
 
 SLIDER
-12
-182
-184
-215
-fox-fertility
-fox-fertility
+288
+468
+460
+501
+rabbit-fertility
+rabbit-fertility
 1
-12
-2.0
+20
+12.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-11
-221
-183
-254
+289
+522
+461
+555
+fox-fertility
+fox-fertility
+1
+12
+4.0
+1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+476
+468
+648
+501
 grass-energy
 grass-energy
 1
@@ -304,10 +304,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-11
-262
-183
-295
+476
+522
+648
+555
 grass-regrowth-rate
 grass-regrowth-rate
 1
