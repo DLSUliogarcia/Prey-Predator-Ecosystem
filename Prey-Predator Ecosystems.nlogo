@@ -62,7 +62,6 @@ to go
   if not any? turtles [ stop ]
 
   ask rabbits [
-
     set energy energy - 1
 
     let target-grass one-of patches with [pcolor = lime]
@@ -111,10 +110,9 @@ to go
   ]
 
   ask foxes [
-
     set energy energy - 1
 
-    let target-rabbit one-of rabbits in-radius 5
+    let target-rabbit one-of rabbits in-radius 4.5
     if target-rabbit != nobody [
       face target-rabbit
       fd fox-speed
@@ -230,9 +228,9 @@ NIL
 
 SLIDER
 102
-524
+470
 274
-557
+503
 rabbit-count
 rabbit-count
 1
@@ -244,15 +242,15 @@ NIL
 HORIZONTAL
 
 SLIDER
-103
-470
-275
-503
+102
+525
+274
+558
 fox-count
 fox-count
 1
 100
-50.0
+25.0
 1
 1
 NIL
@@ -282,64 +280,49 @@ fox-fertility
 fox-fertility
 1
 12
-4.0
+6.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-477
-470
-649
-503
+664
+471
+836
+504
 grass-energy
 grass-energy
 1
 25
-10.0
+12.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-477
+663
 524
-649
+835
 557
 grass-regrowth-rate
 grass-regrowth-rate
 1
 100
-4.0
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-671
-523
-843
-556
+476
+524
+648
+557
 fox-speed
 fox-speed
-0.001
-2.500
-1.136
-0.001
-1
-NIL
-HORIZONTAL
-
-SLIDER
-668
-471
-840
-504
-rabbit-speed
-rabbit-speed
 0.001
 2.500
 1.0
@@ -347,6 +330,62 @@ rabbit-speed
 1
 NIL
 HORIZONTAL
+
+SLIDER
+476
+470
+648
+503
+rabbit-speed
+rabbit-speed
+0.001
+2.500
+0.965
+0.001
+1
+NIL
+HORIZONTAL
+
+MONITOR
+171
+65
+226
+110
+Foxes
+count foxes
+0
+1
+11
+
+MONITOR
+234
+65
+291
+110
+Rabbits
+count rabbits
+0
+1
+11
+
+PLOT
+13
+129
+455
+441
+plot 1
+Ticks
+Animals
+0.0
+1000.0
+0.0
+1000.0
+true
+true
+"" ""
+PENS
+"Foxes" 1.0 0 -955883 true "" "plot count foxes"
+"Rabbits" 1.0 0 -16777216 true "" "plot count rabbits"
 
 @#$#@#$#@
 ## WHAT IS IT?
